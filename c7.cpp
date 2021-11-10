@@ -10,6 +10,11 @@ using namespace cv;
 
 int main(int argc, char **argv){
 
+    if(argc < 2){
+        cerr << "Usage: ./c7 <input_img>" << endl;
+        return -1;
+    }
+
     Mat image = imread(argv[1], CV_LOAD_IMAGE_COLOR);
     Mat gray;
     cvtColor(image, gray, COLOR_BGR2GRAY);
