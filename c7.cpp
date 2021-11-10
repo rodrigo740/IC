@@ -1,8 +1,9 @@
 #include <iostream>
-#include<opencv2/core.hpp>
-#include<opencv2/highgui.hpp>
-#include<opencv2/imgcodecs.hpp>
-#include<opencv2/imgproc.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgproc.hpp>
+#include <map>
 
 using namespace std;
 using namespace cv;
@@ -10,90 +11,93 @@ using namespace cv;
 int main(int argc, char **argv){
 
     Mat image = imread(argv[1], CV_LOAD_IMAGE_COLOR);
-    Mat hist = Mat::zeros(256, 1, CV_32F);
-    image.convertTo(image, CV_32F);
+    Mat gray;
+    cvtColor(image, gray, COLOR_BGR2GRAY);
+
+
+    vector<Mat> bgr_planes;
+    split(image, bgr_planes);
+
     
-    double value;
+    Mat histBlue = Mat::zeros(256, 1, CV_32F);
+    Mat histRed = Mat::zeros(256, 1, CV_32F);
+    Mat histGreen = Mat::zeros(256, 1, CV_32F);
+    Mat hist2gray = Mat::zeros(256, 1, CV_32F);
+
+    bgr_planes[0].convertTo(bgr_planes[0], CV_32F);
+    bgr_planes[1].convertTo(bgr_planes[1], CV_32F);
+    bgr_planes[2].convertTo(bgr_planes[2], CV_32F);
+    gray.convertTo(gray, CV_32F);    
+    
+    double value, valueB, valueR, valueG;
     
     for (int i = 0; i < image.rows; i++)
     {
         for (int j = 0; j < image.cols; j++)
         {
-            value = image.at<float>(i,j);
-            hist.at<float>(value) += 1;
-        }
-        
+            
+            valueB = bgr_planes[0].at<float>(i,j);
+            valueG = bgr_planes[1].at<float>(i,j);
+            valueR = bgr_planes[2].at<float>(i,j);
+
+            histBlue.at<float>(valueB) += 1;
+            histRed.at<float>(valueR) += 1;
+            histGreen.at<float>(valueG) += 1;
+
+
+            value = gray.at<float>(i,j);
+            hist2gray.at<float>(value) += 1;
+        }        
     }
 
+    
+    Mat hist_img_blue(400, 512, CV_8UC3, Scalar(0, 0, 0));
+    Mat hist_img_red(400, 512, CV_8UC3, Scalar(0, 0, 0));
+    Mat hist_img_green(400, 512, CV_8UC3, Scalar(0, 0, 0));
+    Mat hist_img_gray(400, 512, CV_8UC3, Scalar(0, 0, 0));
+    Mat normalized_hist_blue, normalized_hist_red, normalized_hist_green, normalized_hist_gray;
 
-    Mat hist_img(400, 512, CV_8UC3, Scalar(0, 0, 0));
-    Mat normalized_hist;
-    normalize(hist, normalized_hist, 0, 400, NORM_MINMAX, -1, Mat());
+    normalize(histBlue, normalized_hist_blue, 0, 400, NORM_MINMAX, -1, Mat());
+    normalize(histRed, normalized_hist_red, 0, 400, NORM_MINMAX, -1, Mat());
+    normalize(histGreen, normalized_hist_green, 0, 400, NORM_MINMAX, -1, Mat());
+    normalize(hist2gray, normalized_hist_gray, 0, 400, NORM_MINMAX, -1, Mat());
 
 
     for(int i = 0; i < 256; i++){
-      //  rectangle(hist_img, Point(2 * i, hist_img.rows - normalized_hist.at<float>(i)), 
-        //    Point(2 * (i + 1), hist_img.rows), Scalar(255, 0, 0));
 
-            rectangle(hist_img, Point(2 * i, hist_img.rows - normalized_hist.at<float>(i)),
-				Point(2 * (i + 1), hist_img.rows), Scalar(255, 0, 0));
-    }
+        rectangle(hist_img_blue, Point(2 * i, hist_img_blue.rows - normalized_hist_blue.at<float>(i)),
+			Point(2 * (i + 1), hist_img_blue.rows), Scalar(255,0,0), -1);
 
-    namedWindow("Histogram", WINDOW_NORMAL);
-    imshow("Histogram", hist_img);
-    waitKey(0);    
+        rectangle(hist_img_red, Point(2 * i, hist_img_red.rows - normalized_hist_red.at<float>(i)),
+			Point(2 * (i + 1), hist_img_red.rows), Scalar(0,0,255), -1);
 
-
-
-    /*
-
-    if(argc < 5){
-        cerr << "Usage: ./b4 <original_img> <copied_img> <original_vid> <copied_vid>" << endl;
-        return -1;
-    }
-
-    Mat image = imread(argv[1], CV_LOAD_IMAGE_COLOR);
-    Mat clone = Mat::zeros(image.rows, image.cols, image.type());
-
-    for (int i = 0; i < image.rows; i++)
-    {
-        for (int j = 0; j < image.cols; j++)
-        {
-            clone.at<Vec3b>(i, j) = image.at<Vec3b>(i, j);
-        }
+        rectangle(hist_img_green, Point(2 * i, hist_img_green.rows - normalized_hist_green.at<float>(i)),
+			Point(2 * (i + 1), hist_img_green.rows), Scalar(0,255,0), -1);
         
+        rectangle(hist_img_gray, Point(2 * i, hist_img_gray.rows - normalized_hist_gray.at<float>(i)),
+			Point(2 * (i + 1), hist_img_gray.rows), Scalar(255,0,0), -1);
     }
+
+
+    namedWindow("Histogram Blue", WINDOW_NORMAL);
+    imshow("Histogram Blue", hist_img_blue);
     
-    imwrite(argv[2], clone);
+    namedWindow("Histogram Red", WINDOW_NORMAL);
+    imshow("Histogram Red", hist_img_red);
 
-    VideoCapture cap = VideoCapture(argv[3]);
+    namedWindow("Histogram Green", WINDOW_NORMAL);
+    imshow("Histogram Green", hist_img_green);
 
-    if(!cap.isOpened()){
-        cerr << "Failed to open video" << endl;
-        return -1;
-    }
+    namedWindow("Histogram grayscale", WINDOW_NORMAL);
+    imshow("Histogram grayscale", hist_img_gray);
 
-    int fps = cap.get(5);
-    int frame_count = cap.get(7);
-    int frame_width = static_cast<int>(cap.get(3));
-    int frame_height = static_cast<int>(cap.get(4));
-    Size frame_size(frame_width, frame_height);
+    waitKey(0);
 
-    VideoWriter output (argv[4], VideoWriter::fourcc('M', 'J', 'P', 'G'), fps, frame_size); //Encodes to AVI format
+    imwrite("histograms/blue_histogram.jpg",hist_img_blue);
+    imwrite("histograms/red_histogram.jpg",hist_img_red);
+    imwrite("histograms/green_histogram.jpg",hist_img_green);
+    imwrite("histograms/grayscale_histogram.jpg",hist_img_gray);
 
-    while(cap.isOpened()){
-        Mat frame;
 
-        if(cap.read(frame)){
-            output.write(frame);
-        }else{
-            break;
-        }
-
-    }
-
-    cap.release();
-    output.release();
-    */
     return 0;
 }
