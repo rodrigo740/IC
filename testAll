@@ -42,8 +42,3 @@ printf "Reducing the number of bits used to represent each pixel of lena.ppm\n"
 g++ ex9.cpp -o ex9 `pkg-config --cflags --libs opencv`
 ./ex9 images/lena.ppm 8
 printf '\n'
-
-
-
-
-
