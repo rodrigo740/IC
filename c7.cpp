@@ -3,7 +3,6 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
-#include <map>
 
 using namespace std;
 using namespace cv;
@@ -11,7 +10,7 @@ using namespace cv;
 int main(int argc, char **argv){
 
     if(argc < 2){
-        cerr << "Usage: ./c7 <input_img>" << endl;
+        cerr << "Usage: ./c7 <input_img>\nExample: ./c7 images/lena.ppm " << endl;
         return -1;
     }
 
@@ -40,7 +39,6 @@ int main(int argc, char **argv){
     {
         for (int j = 0; j < image.cols; j++)
         {
-            
             valueB = bgr_planes[0].at<float>(i,j);
             valueG = bgr_planes[1].at<float>(i,j);
             valueR = bgr_planes[2].at<float>(i,j);
