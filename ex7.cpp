@@ -14,10 +14,10 @@ int main(int argc, char **argv){
         return -1;
     }
 
-    Mat image = imread(argv[1], CV_LOAD_IMAGE_COLOR);
+    Mat image = imread(argv[1],CV_LOAD_IMAGE_COLOR);
     Mat gray;
     cvtColor(image, gray, COLOR_BGR2GRAY);
-
+    int numPixels = image.total();
 
     vector<Mat> bgr_planes;
     split(image, bgr_planes);
@@ -96,6 +96,50 @@ int main(int argc, char **argv){
 
     waitKey(0);
     */
+
+    double h1 = 0;
+    for(int row = 0; row < histBlue.rows; ++row) {
+        for(int col = 0; col < histBlue.cols; ++col) {
+            double prob = (static_cast<double>(histBlue.at<float>(row,col))/static_cast<double>(numPixels));
+            if(prob != 0){
+                h1 = h1-prob*log(prob);
+            }
+        }
+    }
+    cout << "Entropy Blue: " << h1 << endl;
+
+    double h2 = 0;
+    for(int row = 0; row < histRed.rows; ++row) {
+        for(int col = 0; col < histRed.cols; ++col) {
+            double prob = (static_cast<double>(histRed.at<float>(row,col))/static_cast<double>(numPixels));
+            if(prob != 0){
+                h2 = h2-prob*log(prob);
+            }
+        }
+    }
+    cout << "Entropy Red: " << h2 << endl;
+
+    double h3 = 0;
+    for(int row = 0; row < histGreen.rows; ++row) {
+        for(int col = 0; col < histGreen.cols; ++col) {
+            double prob = (static_cast<double>(histGreen.at<float>(row,col))/static_cast<double>(numPixels));
+            if(prob != 0){
+                h3 = h3-prob*log(prob);
+            }
+        }
+    }
+    cout << "Entropy Green: " << h3 << endl;
+
+    double h4 = 0;
+    for(int row = 0; row < hist2gray.rows; ++row) {
+        for(int col = 0; col < hist2gray.cols; ++col) {
+            double prob = (static_cast<double>(hist2gray.at<float>(row,col))/static_cast<double>(numPixels));
+            if(prob != 0){
+                h4 = h4-prob*log(prob);
+            }
+        }
+    }
+    cout << "Entropy Grayscale: " << h4 << endl;
 
     imwrite("histograms/blue_histogram.jpg",hist_img_blue);
     imwrite("histograms/red_histogram.jpg",hist_img_red);
