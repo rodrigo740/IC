@@ -4,12 +4,16 @@
 #include <limits>
 #include <map>
 #include <math.h>
-#include "../../AudioFile/AudioFile.h"
+#include "../AudioFile/AudioFile.h"
 
 using namespace std;
 
 int main(int argc, char **argv){
-    ofstream ofs("histogram2.txt");
+    if(argc != 3){
+        cerr << "Usage: ./ex6 <input_audio> <histogram_txt>\nExample: ./ex6 audio/example.wav txts/hist.txt" << endl;
+        return -1;
+    }
+    ofstream ofs(argv[2]);
     AudioFile<float> audioFile;
     audioFile.load(argv[1]);
     int numSamples = audioFile.getNumSamplesPerChannel();

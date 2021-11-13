@@ -1,0 +1,49 @@
+#!/bin/bash
+
+printf 'Testing exercise 2\n'
+printf "Copying text file lusiadas.txt character by character to lusiadasCopy.txt\n"
+
+g++ ex2.cpp -o ex2
+./ex2 txts/lusiadas.txt txts/lusiadasCopy.txt
+printf '\n'
+
+printf 'Testing exercise 3\n'
+printf "Copying audio file noise.wav sample by sample to noiseCopy.wave\n"
+g++ ex3.cpp -o ex3
+./ex3 audio/noise.wav audio/noiseCopy.wav
+printf '\n'
+
+printf 'Testing exercise 4\n'
+printf "Copying image file lena.ppm pixel by pixel to lenaCopy.ppm and video file teste.avi frame by frame to testeCopy.avi\n"
+g++ ex4.cpp -o ex4 `pkg-config --cflags --libs opencv`
+./ex4 images/lena.ppm images/lenaCopy.ppm video/teste.avi video/testeCopy.avi
+printf '\n'
+
+printf 'Testing exercise 5\n'
+printf "Calculating histogram and entropy of the letters in lusiadas.txt\n"
+g++ ex5.cpp -o ex5 -lstdc++fs
+./ex5 txts/lusiadas.txt txts/histogram_ex5.txt
+printf '\n'
+
+printf 'Testing exercise 6\n'
+printf "Calculating histogram and entropy of an audio sample in noise.wav\n"
+g++ ex6.cpp -o ex6
+./ex6 audio/example.wav txts/histogram_ex6.txt
+printf '\n'
+
+printf 'Testing exercise 7\n'
+printf "Calculating histogram and entropy of an image file in lena.ppm\n"
+g++ ex7.cpp -o ex7 `pkg-config --cflags --libs opencv`
+./ex7 images/lena.ppm
+printf '\n'
+
+printf 'Testing exercise 9\n'
+printf "Reducing the number of bits used to represent each pixel of lena.ppm\n"
+g++ ex9.cpp -o ex9 `pkg-config --cflags --libs opencv`
+./ex9 images/lena.ppm 8
+printf '\n'
+
+
+
+
+
