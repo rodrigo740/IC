@@ -1,0 +1,21 @@
+#!/bin/bash
+
+printf 'Starting Compilation\n'
+
+g++ ex2.cpp -o ex2
+
+g++ ex3.cpp -o ex3
+
+g++ ex4.cpp -o ex4 `pkg-config --cflags --libs opencv`
+
+g++ ex5.cpp -o ex5 -lstdc++fs
+
+g++ ex6.cpp -o ex6
+
+g++ ex7.cpp -o ex7 `pkg-config --cflags --libs opencv`
+
+g++ ex8.cpp -o ex8 
+
+g++ ex9.cpp -o ex9 `pkg-config --cflags --libs opencv`
+
+printf 'Compilation Finished\n'

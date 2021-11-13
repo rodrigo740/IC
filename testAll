@@ -37,6 +37,12 @@ g++ ex7.cpp -o ex7 `pkg-config --cflags --libs opencv`
 ./ex7 images/lena.ppm
 printf '\n'
 
+printf 'Testing exercise 8\n'
+printf "Uniformization with 8 levels of sound noise.wav\n"
+g++ ex8.cpp -o ex8 
+./ex8 audio/noise.wav 8
+printf '\n'
+
 printf 'Testing exercise 9\n'
 printf "Reducing the number of bits used to represent each pixel of lena.ppm\n"
 g++ ex9.cpp -o ex9 `pkg-config --cflags --libs opencv`
