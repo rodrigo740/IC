@@ -4,7 +4,7 @@
 #include <limits>
 #include <map>
 #include <math.h>
-#include "../AudioFile/AudioFile.h"
+#include "AudioFile/AudioFile.h"
 
 using namespace std;
 

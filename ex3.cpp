@@ -2,7 +2,7 @@
 #include<fstream>
 #include<vector>
 #include <limits>
-#include "../AudioFile/AudioFile.h"
+#include "AudioFile/AudioFile.h"
 
 using namespace std;
 
