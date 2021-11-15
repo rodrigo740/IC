@@ -25,15 +25,16 @@ int main(int argc, char **argv){
     cout << "Channels: " <<  numChannels << endl;
     cout << "Samples: " << numSamples << endl;
 
-    //Variaveis das equacoes
-    int delta = stoi(argv[2]);
-    float value;
+    //passar int e floor
+    int niveis = stoi(argv[2]);
+    int div = (32/niveis)/2;   //nºde bits a dividir por quantos niveis quero
+                            //a dividir por 2 porque dar shift num bit divide por dois, 2 bits por 4, etc...
     for(int i=0; i<numChannels; i++){
         for(int j=0; j<numSamples; j++){
-            float k = floor( (audioFile.samples[i][j] / delta) + 0.5);
-            value = k * delta;
-            //cout << audioFile.samples[i][j] << endl;
-            output.samples[i][j] = value;
+            int n =(int)(audioFile.samples[i][j]*pow(2,15));
+            n = n >> div;
+            n = n << div;
+            output.samples[i][j]=(float)(n/pow(2,15));
         }
     }
     output.save ("audio/ex8.wav", AudioFileFormat::Wave);    
