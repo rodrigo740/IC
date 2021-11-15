@@ -4,7 +4,7 @@
 <p>To run the scripts write ./compileAll and ./testAll
 <p>To initiate the AudioFile submodule is necessary to run the following commands: </p>
 
-git submodule init
+git submodule init and 
 git submodule update
 
 
