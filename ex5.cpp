@@ -23,7 +23,7 @@ int main(int argc, char **argv){
     double h =0;
     for(pair<char,int> i : m){
         double p = (static_cast<double>(i.second)/static_cast<double>(sizeFileIn));
-        h = h-p*log(p);
+        h = h-p*log2(p);
         ofs << "" << i.first << " -> " << i.second << endl;
     }
     cout << "Entropy: " << h << endl;

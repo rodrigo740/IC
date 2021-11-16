@@ -102,7 +102,7 @@ int main(int argc, char **argv){
         for(int col = 0; col < histBlue.cols; ++col) {
             double prob = (static_cast<double>(histBlue.at<float>(row,col))/static_cast<double>(numPixels));
             if(prob != 0){
-                h1 = h1-prob*log(prob);
+                h1 = h1-prob*log2(prob);
             }
         }
     }
@@ -124,7 +124,7 @@ int main(int argc, char **argv){
         for(int col = 0; col < histGreen.cols; ++col) {
             double prob = (static_cast<double>(histGreen.at<float>(row,col))/static_cast<double>(numPixels));
             if(prob != 0){
-                h3 = h3-prob*log(prob);
+                h3 = h3-prob*log2(prob);
             }
         }
     }
@@ -135,7 +135,7 @@ int main(int argc, char **argv){
         for(int col = 0; col < hist2gray.cols; ++col) {
             double prob = (static_cast<double>(hist2gray.at<float>(row,col))/static_cast<double>(numPixels));
             if(prob != 0){
-                h4 = h4-prob*log(prob);
+                h4 = h4-prob*log2(prob);
             }
         }
     }

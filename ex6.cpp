@@ -34,21 +34,21 @@ int main(int argc, char **argv){
     double hl = 0;
     for(pair<float,int> i : ml){
         double p = (static_cast<double>(i.second)/static_cast<double>(numSamples));
-        hl = hl-p*log(p);
+        hl = hl-p*log2(p);
         ofs << "R. " << i.first << " -> " << i.second << endl;
     }
     cout << "Entropy Left Channel: " << hl << endl;
     double hr = 0;
     for(pair<float,int> i : mr){
         double p = (static_cast<double>(i.second)/static_cast<double>(numSamples));
-        hr = hr-p*log(p);
+        hr = hr-p*log2(p);
         ofs << "L. " << i.first << " -> " << i.second << endl;
     }
     cout << "Entropy Right Channel: " << hr << endl;
     double hm = 0;
     for(pair<float,int> i : mm){
         double p = (static_cast<double>(i.second)/static_cast<double>(numSamples));
-        hm = hm-p*log(p);
+        hm = hm-p*log2(p);
         ofs << "M. " << i.first << " -> " << i.second << endl;
     }
     cout << "Entropy Mono Version: " << hm << endl;
