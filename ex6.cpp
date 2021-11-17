@@ -5,10 +5,12 @@
 #include <map>
 #include <math.h>
 #include "AudioFile/AudioFile.h"
-
+#include <chrono>
+using namespace std::chrono;
 using namespace std;
 
 int main(int argc, char **argv){
+    auto start = high_resolution_clock::now();
     if(argc != 3){
         cerr << "Usage: ./ex6 <input_audio> <histogram_txt>\nExample: ./ex6 audio/example.wav txts/hist.txt" << endl;
         return -1;
@@ -53,5 +55,8 @@ int main(int argc, char **argv){
     }
     cout << "Entropy Mono Version: " << hm << endl;
     ofs.close();
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    cout << "Processing Time: " << duration.count() << endl;
     return 0;
 }

@@ -3,11 +3,12 @@
 #include<vector>
 #include <limits>
 #include "AudioFile/AudioFile.h"
-
+#include <chrono>
+using namespace std::chrono;
 using namespace std;
 
 int main(int argc, char **argv){
-
+    auto start = high_resolution_clock::now();
     if(argc != 3){
         cerr << "Usage: ./ex3 <input_file> <output_file>\nExample: ./ex3 audio/noise.wav audio/copyNoise.wav" << endl;
         return -1;
@@ -31,6 +32,9 @@ int main(int argc, char **argv){
         }
     output.setBitDepth (audioFile.getBitDepth());
     output.setSampleRate (audioFile.getSampleRate());
-    output.save (argv[2], AudioFileFormat::Wave);    
+    output.save (argv[2], AudioFileFormat::Wave);  
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    cout << "Processing Time: " << duration.count() << endl;  
     return 0;
 } 
