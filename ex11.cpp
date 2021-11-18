@@ -63,7 +63,7 @@ int main(int argc, char **argv){
 
     float psnr = 10 * log(255*255 / (mse * mse));
     
-    cout << "PSNR: " << psnr << " dB" << "\nMSE: " << mse << endl;
+    cout << "PSNR: " << psnr << " dB" << "\nMaximum per pixel absolute error: " << mse << endl;
 
     return 0;
 }
