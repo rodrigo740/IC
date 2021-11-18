@@ -10,7 +10,7 @@ using namespace cv;
 int main(int argc, char **argv){
 
     if(argc < 3){
-        cerr << "Usage: ./ex9 <input_img> <quantization>\nExample: ./ex9 images/lena.ppm 8" << endl;
+        cerr << "Usage: ./ex9 <input_img> <number_of_levels>\nExample: ./ex9 images/lena.ppm 32" << endl;
         return -1;
     }
 
@@ -34,11 +34,19 @@ int main(int argc, char **argv){
     gray.convertTo(gray, CV_32F);
 
     
-    const int quantization = stoi(argv[2]);
-    const int d = 256/quantization;
+    const int d = 256/stoi(argv[2]);
 
+    double valueByLevel[stoi(argv[2])];
+
+    for (int i = 0; i < stoi(argv[2]); i++)
+    {
+        valueByLevel[i] = (i+1)*d/2 + (i*d)/2;
+    }
+
+    
     double value;
     int temp;
+    int level;
 
     for (int i = 0; i < gray.rows; i++)
     {
@@ -47,27 +55,31 @@ int main(int argc, char **argv){
             // Grayscale
             value = gray.at<float>(i,j);
             temp = trunc(value/d);
-            gray.at<float>(i,j) = temp * d;
+            gray.at<float>(i,j) = valueByLevel[temp];
 
             // Blue
             value = bgr_planes[0].at<float>(i,j);
             temp = trunc(value/d);
-            bgr_planes[0].at<float>(i,j) = temp * d;
+            bgr_planes[0].at<float>(i,j) = valueByLevel[temp];
 
             // Green
             value = bgr_planes[1].at<float>(i,j);
             temp = trunc(value/d);
-            bgr_planes[1].at<float>(i,j) = temp * d;
+            bgr_planes[1].at<float>(i,j) = valueByLevel[temp];
 
             // Red
             value = bgr_planes[2].at<float>(i,j);
             temp = trunc(value/d);
-            bgr_planes[2].at<float>(i,j) = temp * d;
+            bgr_planes[2].at<float>(i,j) = valueByLevel[temp];
         }
     }
 
     Mat merged;
     merge(bgr_planes,merged);
+
+    gray.convertTo(gray, CV_8UC3);
+    merged.convertTo(merged, CV_8UC3);
+    
     /*
     namedWindow("Grayscale", WINDOW_AUTOSIZE);
     imshow("Grayscale", gray);
@@ -76,8 +88,8 @@ int main(int argc, char **argv){
     waitKey(0);
     */
 
-    imwrite("images/quantizedGrayscale.ppm",gray);
-    imwrite("images/quantizedColorImage.ppm",merged);
+    imwrite("images/grayscale.ppm", gray);
+    imwrite("images/color.ppm", merged);
 
     return 0;
 }
