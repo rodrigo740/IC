@@ -50,7 +50,13 @@ g++ ex9.cpp -o ex9 `pkg-config --cflags --libs opencv`
 printf '\n'
 
 printf 'Testing exercise 10\n'
-printf "Calculating the signal-to-noise ratio (SNR) of audio file ex8.wav in relation to the original file noise.wav, as well as the maximum per sample absolute error."
+printf "Calculating the signal-to-noise ratio (SNR) of audio file ex8.wav in relation to the original file noise.wav, as well as the maximum per sample absolute error.\n"
 g++ ex10.cpp -o ex10
 ./ex10 audio/noise.wav audio/ex8.wav
+printf '\n'
+
+printf 'Testing exercise 11\n'
+printf "Calculating the signal-to-noise ratio (SNR) of image file color.ppm in relation to the original file lena.ppm, as well as the maximum per sample absolute error.\n"
+g++ ex11.cpp -o ex11 `pkg-config --cflags --libs opencv`
+./ex11 images/lena.ppm images/color.ppm
 printf '\n'
