@@ -3,12 +3,13 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
-
+#include <chrono>
+using namespace std::chrono;
 using namespace std;
 using namespace cv;
 
 int main(int argc, char **argv){
-
+    auto start = high_resolution_clock::now();
     if(argc < 3){
         cerr << "Usage: ./ex10 <original_img> <noise_img>\nExample: ./ex10 images/lena.ppm images/color.ppm" << endl;
         return -1;
@@ -65,5 +66,8 @@ int main(int argc, char **argv){
     
     cout << "PSNR: " << psnr << " dB" << "\nMaximum per pixel absolute error: " << mse << endl;
 
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    cout << "Processing Time: " << duration.count() << endl;
     return 0;
 }
