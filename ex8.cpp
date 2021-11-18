@@ -5,10 +5,13 @@
 #include <map>
 #include <math.h>
 #include "AudioFile/AudioFile.h"
+#include <chrono>
 
+using namespace std::chrono;
 using namespace std;
 
 int main(int argc, char **argv){
+    auto start = high_resolution_clock::now();
     if(argc != 3){
         cerr << "Usage: ./ex8 <input_sound> <quantization>\nExample: ./ex8 audio/noise.wav 8" << endl;
         return -1;
@@ -37,6 +40,10 @@ int main(int argc, char **argv){
             output.samples[i][j]=(float)(n/pow(2,15));
         }
     }
-    output.save ("audio/ex8.wav", AudioFileFormat::Wave);    
+    output.save ("audio/ex8.wav", AudioFileFormat::Wave);
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    cout << "Processing Time: " << duration.count() << endl;
     return 0;
 }
+
