@@ -42,9 +42,16 @@ int main(int argc, char **argv){
     float snr = 10*log(somX/somR);
     cout << "SNR: " << snr << endl;
 
+    float diff = 0;
+    for (int i = 0; i < numChannels_orig; i++){
+        for (int j = 0; j < numSamples_orig; j++){
+            diff += abs(audioFile_original.samples[i][j]-audioFile_noise.samples[i][j]);
+        }
+    } 
+
     //maximum per sample absolute error
-    float error = 0;
-    cout << "Maximum per sample absolute error: EM FALTA" << error << endl;
+    float error = diff/(numSamples_orig*numChannels_orig);
+    cout << "Maximum per sample absolute error: " << error << endl;
     
     return 0;
 }

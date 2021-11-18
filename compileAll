@@ -18,4 +18,6 @@ g++ ex8.cpp -o ex8
 
 g++ ex9.cpp -o ex9 `pkg-config --cflags --libs opencv`
 
+g++ ex10.cpp -o ex10
+
 printf 'Compilation Finished\n'

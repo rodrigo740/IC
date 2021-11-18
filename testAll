@@ -48,3 +48,9 @@ printf "Reducing the number of bits used to represent each pixel of lena.ppm\n"
 g++ ex9.cpp -o ex9 `pkg-config --cflags --libs opencv`
 ./ex9 images/lena.ppm 8
 printf '\n'
+
+printf 'Testing exercise 10\n'
+printf "Calculating the signal-to-noise ratio (SNR) of audio file ex8.wav in relation to the original file noise.wav, as well as the maximum per sample absolute error."
+g++ ex10.cpp -o ex10
+./ex10 audio/noise.wav audio/ex8.wav
+printf '\n'
