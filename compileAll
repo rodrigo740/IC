@@ -4,22 +4,42 @@ printf 'Starting Compilation\n'
 
 g++ ex2.cpp -o ex2
 
+printf 'ex2 compiled!\n'
+
 g++ ex3.cpp -o ex3
+
+printf 'ex3 compiled!\n'
 
 g++ ex4.cpp -o ex4 `pkg-config --cflags --libs opencv`
 
+printf 'ex4 compiled!\n'
+
 g++ ex5.cpp -o ex5 -lstdc++fs
+
+printf 'ex5 compiled!\n'
 
 g++ ex6.cpp -o ex6
 
+printf 'ex6 compiled!\n'
+
 g++ ex7.cpp -o ex7 `pkg-config --cflags --libs opencv`
+
+printf 'ex7 compiled!\n'
 
 g++ ex8.cpp -o ex8 
 
+printf 'ex8 compiled!\n'
+
 g++ ex9.cpp -o ex9 `pkg-config --cflags --libs opencv`
+
+printf 'ex9 compiled!\n'
 
 g++ ex10.cpp -o ex10
 
+printf 'ex10 compiled!\n'
+
 g++ ex11.cpp -o ex11 `pkg-config --cflags --libs opencv`
+
+printf 'ex11 compiled!\n'
 
 printf 'Compilation Finished\n'
