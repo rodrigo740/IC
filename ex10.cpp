@@ -5,10 +5,12 @@
 #include <map>
 #include <math.h>
 #include "AudioFile/AudioFile.h"
-
+#include <chrono>
+using namespace std::chrono;
 using namespace std;
 
 int main(int argc, char **argv){
+    auto start = high_resolution_clock::now();
     if(argc != 3){
         cerr << "Usage: ./ex10 <input_audio_original> <input_audio_noise> \nExample: ./ex10 audio/example.wav audio/example_noise.wav" << endl;
         return -1;
@@ -23,8 +25,6 @@ int main(int argc, char **argv){
     int numSamples_noi = audioFile_noise.getNumSamplesPerChannel();
     int numChannels_noi = audioFile_noise.getNumChannels();
 
-    // wich sample is stored in b bits
-    int b = 32;
     float somX = 0;
     float somR = 0;
     for (int i = 0; i < numChannels_orig; i++){
@@ -53,5 +53,8 @@ int main(int argc, char **argv){
     float error = diff/(numSamples_orig*numChannels_orig);
     cout << "Maximum per sample absolute error: " << error << endl;
     
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    cout << "Processing Time: " << duration.count() << endl;
     return 0;
 }
