@@ -3,11 +3,15 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
+#include <chrono>
 
 using namespace std;
 using namespace cv;
+using namespace std::chrono;
 
 int main(int argc, char **argv){
+
+    auto start = high_resolution_clock::now();
 
     if(argc < 2){
         cerr << "Usage: ./ex7 <input_img>\nExample: ./ex7 images/lena.ppm " << endl;
@@ -31,7 +35,7 @@ int main(int argc, char **argv){
     bgr_planes[0].convertTo(bgr_planes[0], CV_32F);
     bgr_planes[1].convertTo(bgr_planes[1], CV_32F);
     bgr_planes[2].convertTo(bgr_planes[2], CV_32F);
-    gray.convertTo(gray, CV_32F);    
+    gray.convertTo(gray, CV_32F);
     
     double value, valueB, valueR, valueG;
     
@@ -78,7 +82,7 @@ int main(int argc, char **argv){
 			Point(2 * (i + 1), hist_img_green.rows), Scalar(0,255,0), -1);
         
         rectangle(hist_img_gray, Point(2 * i, hist_img_gray.rows - normalized_hist_gray.at<float>(i)),
-			Point(2 * (i + 1), hist_img_gray.rows), Scalar(255,0,0), -1);
+			Point(2 * (i + 1), hist_img_gray.rows), Scalar(255,255,255), -1);
     }
 
     /*
@@ -146,6 +150,9 @@ int main(int argc, char **argv){
     imwrite("histograms/green_histogram.jpg",hist_img_green);
     imwrite("histograms/grayscale_histogram.jpg",hist_img_gray);
 
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    cout << "Processing Time: " << duration.count() << endl;
 
     return 0;
 }

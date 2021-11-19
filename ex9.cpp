@@ -3,11 +3,15 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
+#include <chrono>
 
 using namespace std;
 using namespace cv;
+using namespace std::chrono;
 
 int main(int argc, char **argv){
+
+    auto start = high_resolution_clock::now();
 
     if(argc < 3){
         cerr << "Usage: ./ex9 <input_img> <number_of_levels>\nExample: ./ex9 images/lena.ppm 32" << endl;
@@ -93,6 +97,9 @@ int main(int argc, char **argv){
 
     Mat image1 = imread(argv[1], CV_LOAD_IMAGE_COLOR);
     Mat image2 = imread("images/color.ppm", CV_LOAD_IMAGE_COLOR);
+    Mat image3 = imread("images/grayscale.ppm", CV_LOAD_IMAGE_GRAYSCALE);
+    Mat image4;
+    cvtColor(image1, image4, COLOR_BGR2GRAY);
 
     vector<Mat> bgr_planes1,bgr_planes2;
     split(image1, bgr_planes1);
@@ -101,18 +108,26 @@ int main(int argc, char **argv){
     bgr_planes1[0].convertTo(bgr_planes1[0], CV_32F);
     bgr_planes1[1].convertTo(bgr_planes1[1], CV_32F);
     bgr_planes1[2].convertTo(bgr_planes1[2], CV_32F);
-    
+    image4.convertTo(image4, CV_32F);
+
     bgr_planes2[0].convertTo(bgr_planes2[0], CV_32F);
     bgr_planes2[1].convertTo(bgr_planes2[1], CV_32F);
     bgr_planes2[2].convertTo(bgr_planes2[2], CV_32F);
+    image3.convertTo(image3, CV_32F);
+
 
     double value1, value2;
-    double mseB, mseG, mseR;
+    double mseB, mseG, mseR, mseGray;
 
     for (int i = 0; i < image1.rows; i++)
     {
         for (int j = 0; j < image1.cols; j++)
         {
+            // Grayscale
+            value1 = image4.at<float>(i,j);
+            value2 = image3.at<float>(i,j);
+            mseGray += pow(abs(value1 - value2), 2);
+
             // Blue
             value1 = bgr_planes1[0].at<float>(i,j);
             value2 = bgr_planes2[0].at<float>(i,j);
@@ -135,12 +150,20 @@ int main(int argc, char **argv){
     mseB = mseB / nPixels;
     mseG = mseG / nPixels;
     mseR = mseR / nPixels;
+    mseGray = mseGray / nPixels;
 
     double mse = (mseB + mseG + mseR) / 3;
 
     float psnr = 10 * log(255*255 / (mse * mse));
+    float psnrGray = 10 * log(255*255 / (mseGray * mseGray));
     
-    cout << "PSNR: " << psnr << " dB" << "\nMSE: " << mse << endl;
+    cout << "PSNR: " << psnr << " dB\nMaximum per pixel absolute error color version: " << mse << 
+        "\n\nPSNR Grayscale: " << psnrGray <<
+        " dB\nMaximum per pixel absolute error grayscale version: " << psnrGray << endl;
 
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    cout << "Processing Time: " << duration.count() << endl;
+    
     return 0;
 }

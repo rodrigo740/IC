@@ -2,6 +2,7 @@
     "files.associations": {
         "fstream": "cpp",
         "*.ipp": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "chrono": "cpp"
     }
 }
